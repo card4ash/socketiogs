@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<ul id="messages"></ul>
+<form action="">
+    <input id="m" autocomplete="off" /><button>Send</button>
+</form>
+@section Scripts
+{
+    <script>
+        $(function () {
+            //var socket = io();
+            //var socket = io.connect("http://localhost:3000");
+            //var socket = io('http://localhost:3000', { transport : ['websocket'] });
+            const socket = io('http://localhost:3000');
+
+            $('form').submit(function (e) {
+                e.preventDefault(); // prevents page reloading
+                socket.emit('chat message', $('#m').val());
+                $('#m').val('');
+                return false;
+            });
+            socket.on('chat message', function (msg) {
+                $('#messages').append($('<li>').text(msg));
+            });
+        });
+    </script>
+
+}
